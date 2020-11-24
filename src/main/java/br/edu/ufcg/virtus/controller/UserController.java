@@ -1,11 +1,11 @@
 package br.edu.ufcg.virtus.controller;
 
+import br.edu.ufcg.virtus.core.domain.Comparison;
+import br.edu.ufcg.virtus.core.dto.FilterDTO;
+import br.edu.ufcg.virtus.core.dto.SearchFilterDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.edu.ufcg.virtus.core.api.ApiVersion;
 import br.edu.ufcg.virtus.core.api.ApiVersions;
@@ -16,6 +16,10 @@ import br.edu.ufcg.virtus.dto.UserDTO;
 import br.edu.ufcg.virtus.model.User;
 import br.edu.ufcg.virtus.service.UserService;
 import io.swagger.annotations.Api;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * CRUD Controller for the model: User.
@@ -70,4 +74,18 @@ public class UserController extends CrudBaseController<User, Integer, UserDTO> {
 		
 		return success();
 	}
+
+	@Override
+	protected SearchFilterDTO makeSearchFilter(HttpServletRequest request) {
+		SearchFilterDTO search = new SearchFilterDTO();
+		List<FilterDTO> filters = new ArrayList<>();
+		FilterDTO filter = new FilterDTO("name", "no", Comparison.LIKE);
+		filter.setComparison(Comparison.IN);
+		filter.setField("name");
+		filter.setValue("n");
+		filters.add(filter);
+		search.setFilters(filters);
+		return search;
+	}
+
 }

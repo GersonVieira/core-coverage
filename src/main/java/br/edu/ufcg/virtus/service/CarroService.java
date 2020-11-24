@@ -1,9 +1,11 @@
 package br.edu.ufcg.virtus.service;
 
+import br.edu.ufcg.virtus.core.dto.LoggedUserDTO;
 import br.edu.ufcg.virtus.core.exception.BusinessException;
 import br.edu.ufcg.virtus.core.repository.CrudBaseRepository;
 import br.edu.ufcg.virtus.core.service.CrudService;
 import br.edu.ufcg.virtus.dto.CarroDTO;
+import br.edu.ufcg.virtus.dto.UserDTO;
 import br.edu.ufcg.virtus.model.Carro;
 import br.edu.ufcg.virtus.repository.CarroRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,17 @@ public class CarroService extends CrudService<Carro, Integer> {
 
     public List<Carro> getAllDTO () {
         return this.carroRepository.findAllCustom();
+    }
+
+    public LoggedUserDTO currentUser() {
+        LoggedUserDTO user = this.getCurrentUser();
+        user.setName(this.getCurrentUsername());
+        user.setId(this.getCurrentUserId());
+        return this.getCurrentUser();
+    }
+
+    public List<CarroDTO> getCarroDTOByFromResult() {
+        return this.carroRepository.transforList();
     }
 
 }

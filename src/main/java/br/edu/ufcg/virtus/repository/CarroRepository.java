@@ -1,6 +1,7 @@
 package br.edu.ufcg.virtus.repository;
 
 import br.edu.ufcg.virtus.core.repository.CrudBaseRepository;
+import br.edu.ufcg.virtus.dto.CarroDTO;
 import br.edu.ufcg.virtus.model.Carro;
 import org.springframework.data.jpa.repository.Query;
 
@@ -20,5 +21,15 @@ public interface CarroRepository extends CrudBaseRepository<Carro, Integer> {
 
     @Query(nativeQuery = true, value = "select * from carro_default")
     List<Carro> findAllCustom();
+
+    @Query(nativeQuery = true, value = "select * from carro_default")
+    Iterable<Object[]> findAllCustomIterable();
+
+    default List<CarroDTO>  transforList() {
+        String[] a = new String[2];
+        a[0] = "id";
+        a[1] = "name";
+        return this.fromResult(CarroDTO.class, this.findAllCustomIterable(), a);
+    }
 
 }
